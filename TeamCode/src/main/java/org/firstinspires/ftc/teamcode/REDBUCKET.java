@@ -119,17 +119,20 @@ public class REDBUCKET extends LinearOpMode {
     public class Intake {
         private Servo xlinear;
         private CRServo intake;
+        private CRServo intake2;
         public Intake(HardwareMap hardwareMap) {
             xlinear = hardwareMap.get(Servo.class, "xlinear");
             intake = hardwareMap.get(CRServo.class, "intake");
+            intake2 = hardwareMap.get(CRServo.class, "intake2");
         }
 
         public class IntakeIn implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                xlinear.setPosition(0.25);
-                intake.setPower(-1);
 
+                intake.setPower(-1);
+                intake2.setPower(1);
+                xlinear.setPosition(0.25);
                 //sleep(1000);
                 return false;
             }
@@ -140,8 +143,10 @@ public class REDBUCKET extends LinearOpMode {
         public class IntakeStop implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                xlinear.setPosition(0.8);
+
                 intake.setPower(0);
+                intake2.setPower(0);
+                xlinear.setPosition(0.8);
                 //sleep(1000);
                 return false;
             }
@@ -154,9 +159,10 @@ public class REDBUCKET extends LinearOpMode {
         public class FlipDown implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                xlinear.setPosition(0.25);
-                intake.setPower(-1);
-                sleep(1000);
+                xlinear.setPosition(0.4);
+                intake.setPower(0.8);
+                intake2.setPower(-0.8);
+                sleep(1500);
                 return false;
             }
         }
@@ -167,12 +173,16 @@ public class REDBUCKET extends LinearOpMode {
         public class Outake implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                xlinear.setPosition(0.6);
-                intake.setPower(1);
-                sleep(500);
-                xlinear.setPosition(0.8);
+                xlinear.setPosition(0.7);
+                intake.setPower(-1);
+                intake2.setPower(1);
                 sleep(1000);
+                xlinear.setPosition(0.8);
+                sleep(500);
+                //xlinear.setPosition(0.8);
+
                 intake.setPower(0);
+                intake2.setPower(0);
                 return false;
             }
         }
@@ -181,7 +191,7 @@ public class REDBUCKET extends LinearOpMode {
             return new Outake();
         }
     }
-    public class Claw {
+    /*public class Claw {
         private Servo claw;
 
         public Claw(HardwareMap hardwareMap) {
@@ -209,13 +219,13 @@ public class REDBUCKET extends LinearOpMode {
         public Action openClaw() {
             return new OpenClaw();
         }
-    }
+    }*/
 
     @Override
     public void runOpMode() {
         Pose2d initialPose = new Pose2d(0, 0, Math.toRadians(90));
         MecanumDrive drive = new MecanumDrive(hardwareMap, initialPose);
-        Claw claw = new Claw(hardwareMap);
+        //Claw claw = new Claw(hardwareMap);
         Lift lift = new Lift(hardwareMap);
         Intake intake = new Intake(hardwareMap);
         // vision here that outputs position
@@ -223,13 +233,15 @@ public class REDBUCKET extends LinearOpMode {
 
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
-                .strafeTo(new Vector2d(0, 5))
-                .splineToSplineHeading(new Pose2d(-16, 7, Math.toRadians(220)), Math.toRadians(190))
-                .waitSeconds(0.5);
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-22,9 ,Math.toRadians(220)))
-                .strafeTo(new Vector2d(-24, 7))
-                .turn(Math.toRadians(-120))
-                .strafeTo(new Vector2d(-24, 22));
+                .strafeToConstantHeading(new Vector2d(0, 0))
+                .splineToSplineHeading(new Pose2d(-11, 13, Math.toRadians(230)), Math.toRadians(190));
+                //.waitSeconds(0.5);
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-11,13 ,Math.toRadians(230)))
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(3, 27, Math.toRadians(90)), Math.toRadians(0));
+        //.strafeTo(new Vector2d(-24, 7))
+                //.turn(Math.toRadians(-120))
+                //.strafeTo(new Vector2d(-24, 22));
         //.splineToSplineHeading(new Pose2d(-7, 18, Math.toRadians(90)), Math.toRadians(0));
         //.strafeTo(new Vector2d(19, 38));
         TrajectoryActionBuilder tabenter = drive.actionBuilder( new Pose2d(-24,22,Math.toRadians(80)))
@@ -282,7 +294,7 @@ public class REDBUCKET extends LinearOpMode {
                 .waitSeconds(0.5)
                 .build();
         // actions that need to happen on init; for instance, a claw tightening.
-        Actions.runBlocking(claw.closeClaw());
+        //Actions.runBlocking(claw.closeClaw());
 
 
         while (!isStopRequested() && !opModeIsActive()) {
@@ -326,13 +338,15 @@ public class REDBUCKET extends LinearOpMode {
                                 trajectoryActionChosen,
                                 lift.liftUp()
                         ),
+
                         intake.Outake(),
+
 
                         new ParallelAction(
                                 trajectoryActionChosen2,
                                 lift.liftDown()
                         ),
-                        intake.FlipDown(),
+                        intake.FlipDown()/*
                         new ParallelAction(
                                 trajectoryActionChosenenter,
                                 intake.IntakeIn()
@@ -360,26 +374,7 @@ public class REDBUCKET extends LinearOpMode {
                                 lift.liftUp()
                         ),
                         intake.Outake()
-                        /*
-                        new ParallelAction(
-                                lift.liftDown(),
-                                trajectoryActionChosen4
-                        ),
-                       intake.FlipDown(),
-                        trajectoryActionChosenexit,
-                        intake.IntakeIn(),
-
-
-                        new ParallelAction(
-                                lift.liftUp(),
-                                trajectoryActionChosen5
-                        ),
-                        intake.Outake(),
-                        lift.liftDown(),
-                        trajectoryActionCloseOut5
-                )
-
-                  */)
+                        */)
         );
     }
 }
