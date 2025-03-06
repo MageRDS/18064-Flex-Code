@@ -140,6 +140,20 @@ public class REDBUCKET extends LinearOpMode {
         public Action IntakeIn() {
             return new IntakeIn();
         }
+        public class IntakeUp implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+
+                intake.setPower(0);
+                intake2.setPower(0);
+                xlinear.setPosition(0.8);
+                //sleep(1000);
+                return false;
+            }
+        }
+        public Action IntakeUp() {
+            return new IntakeUp();
+        }
         public class IntakeStop implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
@@ -159,10 +173,10 @@ public class REDBUCKET extends LinearOpMode {
         public class FlipDown implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                xlinear.setPosition(0.4);
+                xlinear.setPosition(0.25);
                 intake.setPower(0.8);
                 intake2.setPower(-0.8);
-                sleep(1500);
+                sleep(700);
                 return false;
             }
         }
@@ -174,9 +188,9 @@ public class REDBUCKET extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 xlinear.setPosition(0.7);
-                intake.setPower(-1);
-                intake2.setPower(1);
-                sleep(1000);
+                intake.setPower(-0.8);
+                intake2.setPower(0.8);
+                sleep(500);
                 xlinear.setPosition(0.8);
                 sleep(500);
                 //xlinear.setPosition(0.8);
@@ -234,9 +248,9 @@ public class REDBUCKET extends LinearOpMode {
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
                 .strafeToConstantHeading(new Vector2d(0, 0))
-                .splineToSplineHeading(new Pose2d(-11, 13, Math.toRadians(230)), Math.toRadians(190));
+                .splineToSplineHeading(new Pose2d(-10, 14, Math.toRadians(230)), Math.toRadians(190));
                 //.waitSeconds(0.5);
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-11,13 ,Math.toRadians(230)))
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-10,14 ,Math.toRadians(230)))
                 .setReversed(true)
                 .splineToSplineHeading(new Pose2d(3, 27, Math.toRadians(90)), Math.toRadians(0));
         //.strafeTo(new Vector2d(-24, 7))
@@ -244,18 +258,17 @@ public class REDBUCKET extends LinearOpMode {
                 //.strafeTo(new Vector2d(-24, 22));
         //.splineToSplineHeading(new Pose2d(-7, 18, Math.toRadians(90)), Math.toRadians(0));
         //.strafeTo(new Vector2d(19, 38));
-        TrajectoryActionBuilder tabenter = drive.actionBuilder( new Pose2d(-24,22,Math.toRadians(80)))
-                .turn(Math.toRadians(-40))
-                .strafeTo(new Vector2d(-24, 22))
-                .turn(Math.toRadians(40))
-                .waitSeconds(1);
+        TrajectoryActionBuilder tabenter = drive.actionBuilder( new Pose2d(3,27,Math.toRadians(90)))
+                .splineToSplineHeading(new Pose2d(-9, 17, Math.toRadians(230)), Math.toRadians(180));
+
         //.strafeTo(new Vector2d(14.5,38));
         //.strafeTo(new Vector2d(16,38));
         TrajectoryActionBuilder tab3 = drive.actionBuilder( new Pose2d(-24,22,Math.toRadians(90)))
+                .splineToSplineHeading(new Pose2d(-19, 20, Math.toRadians(90)), Math.toRadians(0));
 
-                .turn(Math.toRadians(160))
 
-                .strafeTo(new Vector2d(-22,10));
+
+
 
         TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-22,10,Math.toRadians(250)))
                 .turn(Math.toRadians(-152))
@@ -333,7 +346,7 @@ public class REDBUCKET extends LinearOpMode {
         Actions.runBlocking(
 
                 new SequentialAction(
-
+                        intake.IntakeUp(),
                         new ParallelAction(
                                 trajectoryActionChosen,
                                 lift.liftUp()
@@ -346,18 +359,22 @@ public class REDBUCKET extends LinearOpMode {
                                 trajectoryActionChosen2,
                                 lift.liftDown()
                         ),
-                        intake.FlipDown()/*
+                        intake.FlipDown(),
+
                         new ParallelAction(
                                 trajectoryActionChosenenter,
-                                intake.IntakeIn()
+                                intake.IntakeUp(),
+                                lift.liftUp()
                         ),
-                        intake.IntakeStop(),
+                        intake.Outake(),
+
+
 
 
                         new ParallelAction(
-                                lift.liftUp(),
+                                lift.liftDown(),
                                 trajectoryActionChosen3
-                        ),
+                        )/*
                         intake.Outake(),
                         new ParallelAction(
                                 trajectoryActionChosen4,
