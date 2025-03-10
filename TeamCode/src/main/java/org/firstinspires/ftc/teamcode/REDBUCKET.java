@@ -188,8 +188,8 @@ public class REDBUCKET extends LinearOpMode {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
                 xlinear.setPosition(0.7);
-                intake.setPower(-0.8);
-                intake2.setPower(0.8);
+                intake.setPower(-0.6);
+                intake2.setPower(0.6);
                 sleep(500);
                 xlinear.setPosition(0.8);
                 sleep(500);
@@ -252,34 +252,35 @@ public class REDBUCKET extends LinearOpMode {
                 //.waitSeconds(0.5);
         TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-10,14 ,Math.toRadians(230)))
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(3, 27, Math.toRadians(90)), Math.toRadians(0));
+                .splineToSplineHeading(new Pose2d(3, 28, Math.toRadians(90)), Math.toRadians(0));
         //.strafeTo(new Vector2d(-24, 7))
                 //.turn(Math.toRadians(-120))
                 //.strafeTo(new Vector2d(-24, 22));
         //.splineToSplineHeading(new Pose2d(-7, 18, Math.toRadians(90)), Math.toRadians(0));
         //.strafeTo(new Vector2d(19, 38));
-        TrajectoryActionBuilder tabenter = drive.actionBuilder( new Pose2d(3,27,Math.toRadians(90)))
-                .splineToSplineHeading(new Pose2d(-9, 17, Math.toRadians(230)), Math.toRadians(180));
+        TrajectoryActionBuilder tabenter = drive.actionBuilder( new Pose2d(3,28,Math.toRadians(90)))
+                .splineToSplineHeading(new Pose2d(-8, 17, Math.toRadians(220)), Math.toRadians(180));
 
         //.strafeTo(new Vector2d(14.5,38));
         //.strafeTo(new Vector2d(16,38));
-        TrajectoryActionBuilder tab3 = drive.actionBuilder( new Pose2d(-24,22,Math.toRadians(90)))
-                .splineToSplineHeading(new Pose2d(-19, 20, Math.toRadians(90)), Math.toRadians(0));
+        TrajectoryActionBuilder tab3 = drive.actionBuilder( new Pose2d(-9,17,Math.toRadians(220)))
+                .splineToSplineHeading(new Pose2d(-17, 25, Math.toRadians(110)), Math.toRadians(180));
+                //.setReversed(false)
+                //.strafeToConstantHeading(new Vector2d(-21,25));
 
 
 
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-17,25,Math.toRadians(110)))
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(0, 5, Math.toRadians(220)), Math.toRadians(90));
 
 
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-22,10,Math.toRadians(250)))
-                .turn(Math.toRadians(-152))
                 //.splineToSplineHeading(new Pose2d(12, 36, Math.toRadians(100)), Math.toRadians(180))
                 //.turn(Math.toRadians(95))
-                .strafeTo(new Vector2d(-23,17));
-        TrajectoryActionBuilder tabexit = drive.actionBuilder( new Pose2d(-23,17,Math.toRadians(108)))
-                .turn(Math.toRadians(-40))
-                .strafeTo(new Vector2d(-23, 21))
-                .turn(Math.toRadians(40))
-                .waitSeconds(1);
+
+        TrajectoryActionBuilder tabexit = drive.actionBuilder( new Pose2d(0,5,Math.toRadians(220)))
+                .splineToSplineHeading(new Pose2d(-18, 25.4, Math.toRadians(150)), Math.toRadians(180));
+        //.setReversed(false)
         //.strafeTo(new Vector2d(16,38));
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-23,21,Math.toRadians(108)))
                 .turn(Math.toRadians(-213))
@@ -374,7 +375,20 @@ public class REDBUCKET extends LinearOpMode {
                         new ParallelAction(
                                 lift.liftDown(),
                                 trajectoryActionChosen3
-                        )/*
+                        ),
+                        intake.FlipDown(),
+                        new ParallelAction(
+                                trajectoryActionChosen4,
+                                intake.IntakeUp(),
+                                lift.liftUp()
+                        ),
+                        intake.Outake(),
+                        new ParallelAction(
+                            lift.liftDown(),
+                            trajectoryActionChosenexit
+                        ),
+                        intake.FlipDown()
+                        /*
                         intake.Outake(),
                         new ParallelAction(
                                 trajectoryActionChosen4,
