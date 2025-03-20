@@ -177,7 +177,7 @@ public class REDBUCKET extends LinearOpMode {
 
                 flipper.setPower(0.8);
 
-                sleep(650);
+                sleep(500);
                 flipper.setPower(0);
                 return false;
             }
@@ -218,9 +218,9 @@ public class REDBUCKET extends LinearOpMode {
         public class Outake implements Action {
             @Override
             public boolean run(@NonNull TelemetryPacket packet) {
-                xlinear.setPosition(0.7);
-                intake.setPower(-0.6);
-                intake2.setPower(0.6);
+                xlinear.setPosition(0.65);
+                intake.setPower(-0.2);
+                intake2.setPower(0.2);
                 sleep(500);
                 xlinear.setPosition(0.8);
                 sleep(500);
@@ -314,14 +314,21 @@ public class REDBUCKET extends LinearOpMode {
         //.setReversed(false)
         //.strafeTo(new Vector2d(16,38));
         TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-13,28,Math.toRadians(150)))
-                .turn(Math.toRadians(120));
+                .setReversed(false)
+                .turn(Math.toRadians(60));
+
+
+
               //.setReversed(false)
               //.splineToSplineHeading(new Pose2d(-5, 10, Math.toRadians(220)), Math.toRadians(-45));
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-13,28,Math.toRadians(270)))
-                .strafeToConstantHeading(new Vector2d(-11,26));
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-13,28,Math.toRadians(210)))
+                .waitSeconds(0.5)
+                .turn(Math.toRadians(70));
         //.setReversed(false)
         //.splineToSplineHeading(new Pose2d(-5, 10, Math.toRadians(220)), Math.toRadians(-45));
-
+        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(-13,28,Math.toRadians(280)))
+                .strafeToConstantHeading(new Vector2d(-13, 23))
+                .turn(Math.toRadians(-20));
 
         Action trajectoryActionCloseOut = tab1.endTrajectory().fresh()
                 //.strafeTo(new Vector2d(-25, 8))
@@ -380,6 +387,9 @@ public class REDBUCKET extends LinearOpMode {
         trajectoryActionChosenexit = tabexit.build();
         Action trajectoryActionChosen6;
         trajectoryActionChosen6 = tab6.build();
+        Action trajectoryActionChosen7;
+        trajectoryActionChosen7 = tab7.build();
+
 
         Actions.runBlocking(
 
@@ -431,11 +441,17 @@ public class REDBUCKET extends LinearOpMode {
                 //lift.liftUp()
         ),
                         new ParallelAction(
-                                trajectoryActionChosen6,
+
                                 intake.IntakeUp(),
                                 intake.FlipIn()
                                 //lift.liftUp()
-                        )
+                        ),
+                        trajectoryActionChosen6,
+                        trajectoryActionChosen7,
+                        lift.liftUp(),
+                        intake.Outake()
+
+
                         // intake.FlipDown(),
        /* new ParallelAction(
                 trajectoryActionChosen5,
