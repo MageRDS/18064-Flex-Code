@@ -177,7 +177,7 @@ public class REDBUCKET extends LinearOpMode {
 
                 flipper.setPower(0.8);
 
-                sleep(500);
+                sleep(560);
                 flipper.setPower(0);
                 return false;
             }
@@ -192,13 +192,27 @@ public class REDBUCKET extends LinearOpMode {
 
                 flipper.setPower(-0.8);
 
-                sleep(650);
+                sleep(560);
                 flipper.setPower(0);
                 return false;
             }
         }
         public Action FlipIn() {
             return new FlipIn();
+        }
+        public class FlipInfast implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+
+                flipper.setPower(-0.8);
+
+                sleep(100);
+                flipper.setPower(0);
+                return false;
+            }
+        }
+        public Action FlipInfast() {
+            return new FlipInfast();
         }
         public class FlipDown implements Action {
             @Override
@@ -207,12 +221,26 @@ public class REDBUCKET extends LinearOpMode {
                 xlinear.setPosition(0.25);
                 intake.setPower(0.8);
                 intake2.setPower(-0.8);
-                sleep(1000);
+                sleep(800);
                 return false;
             }
         }
         public Action FlipDown() {
             return new FlipDown();
+        }
+        public class FlipDownFast implements Action {
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                sleep(100);
+                xlinear.setPosition(0.25);
+                intake.setPower(1);
+                intake2.setPower(-1);
+                sleep(1200);
+                return false;
+            }
+        }
+        public Action FlipDownFast() {
+            return new FlipDownFast();
         }
 
         public class Outake implements Action {
@@ -421,6 +449,7 @@ public class REDBUCKET extends LinearOpMode {
 
                         new ParallelAction(
                                 lift.liftDown(),
+                                intake.FlipInfast(),
                                 trajectoryActionChosen3
                         ),
                         intake.FlipDown(),
@@ -437,7 +466,7 @@ public class REDBUCKET extends LinearOpMode {
                         intake.FlipOut(),
         new ParallelAction(
                 trajectoryActionChosen5,
-                intake.FlipDown()
+                intake.FlipDownFast()
                 //lift.liftUp()
         ),
                         new ParallelAction(
