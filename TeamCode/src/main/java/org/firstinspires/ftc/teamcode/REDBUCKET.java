@@ -177,7 +177,7 @@ public class REDBUCKET extends LinearOpMode {
 
                 flipper.setPower(0.8);
 
-                sleep(560);
+                sleep(530);
                 flipper.setPower(0);
                 return false;
             }
@@ -323,15 +323,15 @@ public class REDBUCKET extends LinearOpMode {
         //.strafeTo(new Vector2d(14.5,38));
         //.strafeTo(new Vector2d(16,38));
         TrajectoryActionBuilder tab3 = drive.actionBuilder( new Pose2d(-9,17,Math.toRadians(220)))
-                .splineToSplineHeading(new Pose2d(-17, 24.5, Math.toRadians(110)), Math.toRadians(180));
+                .splineToSplineHeading(new Pose2d(-19, 24.5, Math.toRadians(90)), Math.toRadians(180));
                 //.setReversed(false)
                 //.strafeToConstantHeading(new Vector2d(-21,25));
 
 
 
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-17,24.5,Math.toRadians(110)))
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-19,24.5,Math.toRadians(90)))
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(0, 5, Math.toRadians(220)), Math.toRadians(90));
+                .splineToSplineHeading(new Pose2d(1, 6, Math.toRadians(220)), Math.toRadians(40));
 
 
                 //.splineToSplineHeading(new Pose2d(12, 36, Math.toRadians(100)), Math.toRadians(180))
