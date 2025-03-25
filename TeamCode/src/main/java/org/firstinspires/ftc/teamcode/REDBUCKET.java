@@ -192,7 +192,7 @@ public class REDBUCKET extends LinearOpMode {
 
                 flipper.setPower(-0.8);
 
-                sleep(560);
+                sleep(1060);
                 flipper.setPower(0);
                 return false;
             }
@@ -233,9 +233,9 @@ public class REDBUCKET extends LinearOpMode {
             public boolean run(@NonNull TelemetryPacket packet) {
                 sleep(100);
                 xlinear.setPosition(0.25);
-                intake.setPower(1);
-                intake2.setPower(-1);
-                sleep(1200);
+                intake.setPower(0.8);
+                intake2.setPower(-0.8);
+                sleep(1000);
                 return false;
             }
         }
@@ -307,61 +307,63 @@ public class REDBUCKET extends LinearOpMode {
 
         TrajectoryActionBuilder tab1 = drive.actionBuilder(initialPose)
                 .strafeToConstantHeading(new Vector2d(0, 0))
-                .splineToSplineHeading(new Pose2d(-10, 14, Math.toRadians(230)), Math.toRadians(190));
+                .splineToSplineHeading(new Pose2d(-10, 13, Math.toRadians(230)), Math.toRadians(190));
                 //.waitSeconds(0.5);
-        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-10,14 ,Math.toRadians(230)))
+        TrajectoryActionBuilder tab2 = drive.actionBuilder(new Pose2d(-10,13 ,Math.toRadians(230)))
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(5, 28, Math.toRadians(90)), Math.toRadians(0));
+                .splineToSplineHeading(new Pose2d(5, 27.5, Math.toRadians(90)), Math.toRadians(0));
         //.strafeTo(new Vector2d(-24, 7))
                 //.turn(Math.toRadians(-120))
                 //.strafeTo(new Vector2d(-24, 22));
         //.splineToSplineHeading(new Pose2d(-7, 18, Math.toRadians(90)), Math.toRadians(0));
         //.strafeTo(new Vector2d(19, 38));
-        TrajectoryActionBuilder tabenter = drive.actionBuilder( new Pose2d(5,28,Math.toRadians(90)))
-                .splineToSplineHeading(new Pose2d(-8, 17, Math.toRadians(220)), Math.toRadians(180));
+        TrajectoryActionBuilder tabenter = drive.actionBuilder( new Pose2d(5,27.5,Math.toRadians(90)))
+                .splineToSplineHeading(new Pose2d(-8, 16, Math.toRadians(220)), Math.toRadians(180));
 
         //.strafeTo(new Vector2d(14.5,38));
         //.strafeTo(new Vector2d(16,38));
-        TrajectoryActionBuilder tab3 = drive.actionBuilder( new Pose2d(-9,17,Math.toRadians(220)))
-                .splineToSplineHeading(new Pose2d(-19, 24.5, Math.toRadians(90)), Math.toRadians(180));
+        TrajectoryActionBuilder tab3 = drive.actionBuilder( new Pose2d(-9,16,Math.toRadians(220)))
+                .splineToSplineHeading(new Pose2d(-19, 24, Math.toRadians(90)), Math.toRadians(180));
                 //.setReversed(false)
                 //.strafeToConstantHeading(new Vector2d(-21,25));
 
 
 
-        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-19,24.5,Math.toRadians(90)))
+        TrajectoryActionBuilder tab4 = drive.actionBuilder(new Pose2d(-19,24,Math.toRadians(90)))
                 .setReversed(true)
-                .splineToSplineHeading(new Pose2d(2, 7, Math.toRadians(220)), Math.toRadians(40));
+                .splineToSplineHeading(new Pose2d(2, 6, Math.toRadians(220)), Math.toRadians(40));
 
 
                 //.splineToSplineHeading(new Pose2d(12, 36, Math.toRadians(100)), Math.toRadians(180))
                 //.turn(Math.toRadians(95))
 
-        TrajectoryActionBuilder tabexit = drive.actionBuilder( new Pose2d(2,7,Math.toRadians(220)))
+        TrajectoryActionBuilder tabexit = drive.actionBuilder( new Pose2d(2,6,Math.toRadians(220)))
                 //.splineToSplineHeading(new Pose2d(-13, 28, Math.toRadians(150)), Math.toRadians(180));
         //.setReversed(false)
-        .splineToSplineHeading(new Pose2d(-10, 13, Math.toRadians(90)), Math.toRadians(90));
+        .splineToSplineHeading(new Pose2d(-10, 20.5, Math.toRadians(90)), Math.toRadians(90));
         //.setReversed(false)
         //.strafeTo(new Vector2d(16,38));
                 //.turn(Math.toRadians(-120))
         //.strafeToConstantHeading(new Vector2d(1,9));
-        TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-10,13,Math.toRadians(90)))
+        TrajectoryActionBuilder tab5 = drive.actionBuilder(new Pose2d(-10,20.5,Math.toRadians(90)))
                 .setReversed(false)
-                //.turn(Math.toRadians(20));
-                .splineToSplineHeading(new Pose2d(-10, 15, Math.toRadians(105)), Math.toRadians(90));
+                .turn(Math.toRadians(30));
+                //.splineToSplineHeading(new Pose2d(-10, 15, Math.toRadians(105)), Math.toRadians(90));
         //.setReversed(false)
 
 
               //.setReversed(false)
               //.splineToSplineHeading(new Pose2d(-5, 10, Math.toRadians(220)), Math.toRadians(-45));
-        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-13,28,Math.toRadians(210)))
-                .waitSeconds(0.5)
-                .turn(Math.toRadians(70));
+        TrajectoryActionBuilder tab6 = drive.actionBuilder(new Pose2d(-10,19,Math.toRadians(100)))
+
+                .turn(Math.toRadians(0.1));
         //.setReversed(false)
         //.splineToSplineHeading(new Pose2d(-5, 10, Math.toRadians(220)), Math.toRadians(-45));
-        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(-13,28,Math.toRadians(280)))
-                .strafeToConstantHeading(new Vector2d(-13, 23))
-                .turn(Math.toRadians(-20));
+        TrajectoryActionBuilder tab7 = drive.actionBuilder(new Pose2d(-10,19,Math.toRadians(100)))
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(2, 7, Math.toRadians(230)), Math.toRadians(40));
+                //.strafeToConstantHeading(new Vector2d(-13, 23))
+                //.turn(Math.toRadians(-20));
 
         Action trajectoryActionCloseOut = tab1.endTrajectory().fresh()
                 //.strafeTo(new Vector2d(-25, 8))
@@ -470,11 +472,22 @@ public class REDBUCKET extends LinearOpMode {
                         ),
                         intake.FlipOut(),
                         intake.FlipOut(),
-        new ParallelAction(
+
                 trajectoryActionChosen5,
-                intake.FlipDownFast()
+                intake.FlipDownFast(),
                 //lift.liftUp()
-        )
+
+
+                        trajectoryActionChosen6,
+                        new ParallelAction(
+
+                                intake.IntakeUp(),
+                                intake.FlipIn()
+                                //lift.liftUp()
+                        ),
+                        trajectoryActionChosen7,
+                        lift.liftUp(),
+                        intake.Outake()
                         /*
                         new ParallelAction(
 
