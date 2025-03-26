@@ -111,9 +111,37 @@ public class REDBUCKET extends LinearOpMode {
                     return false;
                 }
             }
+
         }
         public Action liftDown(){
             return new LiftDown();
+        }
+        public class LiftDownl implements Action {
+            private boolean initialized = false;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    ylinear.setPower(0.8);
+                    ylinear2.setPower(-0.8);
+                    initialized = true;
+                }
+
+                double pos = ylinear2.getCurrentPosition();
+                packet.put("liftPos", pos);
+                if (pos > 2902.0) {
+                    telemetry.addData("Liftdown", ylinear2.getCurrentPosition());
+                    return true;
+                } else {
+                    ylinear.setPower(0);
+                    ylinear.setPower(0);
+                    return false;
+                }
+            }
+
+        }
+        public Action liftDownl(){
+            return new LiftDownl();
         }
     }
     public class Intake {
@@ -221,7 +249,7 @@ public class REDBUCKET extends LinearOpMode {
                 xlinear.setPosition(0.25);
                 intake.setPower(0.8);
                 intake2.setPower(-0.8);
-                sleep(800);
+                sleep(600);
                 return false;
             }
         }
@@ -235,7 +263,7 @@ public class REDBUCKET extends LinearOpMode {
                 xlinear.setPosition(0.25);
                 intake.setPower(0.8);
                 intake2.setPower(-0.8);
-                sleep(1000);
+                sleep(600);
                 return false;
             }
         }
@@ -364,6 +392,13 @@ public class REDBUCKET extends LinearOpMode {
                 .splineToSplineHeading(new Pose2d(2, 7, Math.toRadians(230)), Math.toRadians(40));
                 //.strafeToConstantHeading(new Vector2d(-13, 23))
                 //.turn(Math.toRadians(-20));
+        TrajectoryActionBuilder tab8 = drive.actionBuilder(new Pose2d(2,7,Math.toRadians(230)))
+                .setReversed(true)
+                .splineToSplineHeading(new Pose2d(2, 20, Math.toRadians(90)), Math.toRadians(80))
+        .setReversed(false)
+        .splineToSplineHeading(new Pose2d(8, 45, Math.toRadians(0)), Math.toRadians(0));
+        //.strafeToConstantHeading(new Vector2d(-13, 23))
+        //.turn(Math.toRadians(-20));
 
         Action trajectoryActionCloseOut = tab1.endTrajectory().fresh()
                 //.strafeTo(new Vector2d(-25, 8))
@@ -424,6 +459,8 @@ public class REDBUCKET extends LinearOpMode {
         trajectoryActionChosen6 = tab6.build();
         Action trajectoryActionChosen7;
         trajectoryActionChosen7 = tab7.build();
+        Action trajectoryActionChosen8;
+        trajectoryActionChosen8 = tab8.build();
 
 
         Actions.runBlocking(
@@ -487,7 +524,11 @@ public class REDBUCKET extends LinearOpMode {
                         ),
                         trajectoryActionChosen7,
                         lift.liftUp(),
-                        intake.Outake()
+                        intake.Outake(),
+                        new ParallelAction(
+                                lift.liftDown(),
+                                trajectoryActionChosen8
+                        )
                         /*
                         new ParallelAction(
 
